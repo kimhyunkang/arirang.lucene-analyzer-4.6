@@ -18,7 +18,6 @@ package org.apache.lucene.analysis.ko;
  */
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,8 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import javax.management.RuntimeErrorException;
 
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
@@ -41,7 +38,6 @@ import org.apache.lucene.analysis.ko.morph.WordEntry;
 import org.apache.lucene.analysis.ko.morph.WordSpaceAnalyzer;
 import org.apache.lucene.analysis.ko.utils.DictionaryUtil;
 import org.apache.lucene.analysis.ko.utils.HanjaUtils;
-import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
@@ -166,7 +162,7 @@ public final class KoreanFilter extends TokenFilter {
     if(outputs.size()==0) return;
     
     Map<String,Token> map = new LinkedHashMap<String,Token>();
-    if(hasOrigin) map.put("0:"+input, new Token(input,0));
+    if(hasOrigin) map.put("0:"+input, new Token(input,offsetAtt.startOffset()));
 
     if(outputs.get(0).getScore()>=AnalysisOutput.SCORE_COMPOUNDS) {
       extractKeyword(outputs,offsetAtt.startOffset(), map, 0);      
@@ -300,7 +296,7 @@ public final class KoreanFilter extends TokenFilter {
    */
   private void analysisChinese(String term) throws MorphException {  
     
-    morphQueue.add(new Token(term,0));
+    morphQueue.add(new Token(term,offsetAtt.startOffset()));
     if(term.length()<2) return; // 1글자 한자는 색인어로 한글을 추출하지 않는다.
     
     List<StringBuffer> candiList = new ArrayList<StringBuffer>();
@@ -347,7 +343,7 @@ public final class KoreanFilter extends TokenFilter {
     if(candiList.size()<maxCandidate) maxCandidate=candiList.size();
     
     for(int i=0;i<maxCandidate;i++) {
-      morphQueue.add(new Token(candiList.get(i).toString(),0));
+      morphQueue.add(new Token(candiList.get(i).toString(),offsetAtt.startOffset()));
     }
     
     Map<String, String> cnounMap = new HashMap<String, String>();
@@ -363,14 +359,14 @@ public final class KoreanFilter extends TokenFilter {
         if(cnounMap.get(entry.getWord())!=null) continue;
          
         // 한글과 매치되는 한자를 짤라서 큐에 저장한다.           
-        morphQueue.add(new Token(term.substring(offset,Math.min(pos,term.length())),offset));
+        morphQueue.add(new Token(term.substring(offset,Math.min(pos,term.length())),offsetAtt.startOffset() + offset));
  
         cnounMap.put(entry.getWord(), entry.getWord());
          
         if(entry.getWord().length()<2) continue; //  한글은 2글자 이상만 저장한다.
          
         // 분리된 한글을 큐에 저장한다.  
-        morphQueue.add(new Token(entry.getWord(),offset));
+        morphQueue.add(new Token(entry.getWord(),offsetAtt.startOffset() + offset));
          
         offset = pos;
       }       
