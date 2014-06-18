@@ -46,6 +46,8 @@ public class KoreanFilterFactory extends TokenFilterFactory {
   private static final String HAS_ORIGIN_PARAM = "hasOrigin";
 
   private static final String HAS_COMPOUND_NOUN_PARAM = "hasCNoun";
+  
+  private static final String IS_QUERY_MODE_PARAM = "queryMode";
 
   // Decides whether the original compound noun is returned or not if analyzed morphologically
   private static final String EXACT_MATCH_PARAM = "exactMatch";
@@ -58,6 +60,8 @@ public class KoreanFilterFactory extends TokenFilterFactory {
 
   private final boolean exactMatch;
   
+  private final boolean queryMode;
+  
   /**
    * Initialize this factory via a set of key-value pairs.
    */
@@ -67,6 +71,7 @@ public class KoreanFilterFactory extends TokenFilterFactory {
     hasOrigin = getBoolean(args, HAS_ORIGIN_PARAM, true);
     exactMatch = getBoolean(args, EXACT_MATCH_PARAM, false);
     hasCNoun = getBoolean(args, HAS_COMPOUND_NOUN_PARAM, true);
+    queryMode = getBoolean(args, IS_QUERY_MODE_PARAM, true);
     if (!args.isEmpty()) {
       throw new IllegalArgumentException("Unknown parameters: " + args);
     }

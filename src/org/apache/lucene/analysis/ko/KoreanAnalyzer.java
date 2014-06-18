@@ -46,6 +46,7 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
     
   private boolean exactMatch = false;
   private boolean originCNoun = true;
+  private boolean queryMode = false;
   
   /** An unmodifiable set containing some common words that are usually not useful for searching. */
   public static final CharArraySet STOP_WORDS_SET; 
@@ -99,7 +100,7 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
     src.setMaxTokenLength(maxTokenLength);
     TokenStream tok = new LowerCaseFilter(matchVersion, src);
     tok = new ClassicFilter(tok);
-    tok = new KoreanFilter(tok, bigrammable, hasOrigin, exactMatch, originCNoun);
+    tok = new KoreanFilter(tok, bigrammable, hasOrigin, exactMatch, originCNoun, queryMode);
     tok = new StopFilter(matchVersion, tok, stopwords);
     return new TokenStreamComponents(src, tok) {
       @Override
@@ -137,6 +138,13 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
    */
   public void setExactMatch(boolean exact) {
     exactMatch = exact;
+  }
+  
+  /**
+   * determin whether the analyzer is running for a query processing
+   */
+  public void setQueryMode(boolean mode) {
+    queryMode = mode;
   }
   
 }

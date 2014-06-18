@@ -17,7 +17,7 @@ public class TestMorphologicalAnalyzer extends TestCase {
 //			"아름다운", "푸미폰국왕은", "정교로운","냉방을",
 //			"하고", 
 //			"전기를",
-//			"만들고","공장을","가동하는",
+			"만들고","공장을","가동하는",
 			"진산세고"
 		};
 		

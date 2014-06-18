@@ -55,6 +55,7 @@ public final class KoreanFilter extends TokenFilter {
   private final boolean bigrammable;
   private final boolean hasOrigin;
   private final boolean originCNoun;
+  private final boolean queryMode;
     
   private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
   private final PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);
@@ -86,6 +87,10 @@ public final class KoreanFilter extends TokenFilter {
   }
 
   public KoreanFilter(TokenStream input, boolean bigram, boolean has, boolean exactMatch, boolean cnoun) {
+	  this(input, bigram, has,exactMatch,cnoun, false);
+  }
+  
+  public KoreanFilter(TokenStream input, boolean bigram, boolean has, boolean exactMatch, boolean cnoun, boolean isQuery) {
     super(input);
     this.bigrammable = bigram;
     this.hasOrigin = has;
@@ -94,6 +99,7 @@ public final class KoreanFilter extends TokenFilter {
     this.cnAnalyzer.setExactMach(exactMatch);
     this.morph = new MorphAnalyzer();
     this.morph.setExactCompound(exactMatch);
+    this.queryMode = isQuery;
   }
   
   public boolean incrementToken() throws IOException {
@@ -200,6 +206,9 @@ public final class KoreanFilter extends TokenFilter {
         
       if(output.getStem().length()>maxStem) maxStem = output.getStem().length();
       if(output.getCNounList().size()>maxDecompounds) maxDecompounds = output.getCNounList().size();
+      
+      // extract the first stem as the keyword for the query processing
+      if(queryMode) break;
     }
 
     if(maxDecompounds>1) 
@@ -222,6 +231,9 @@ public final class KoreanFilter extends TokenFilter {
           
           if(bigrammable&&!cEntry.isExist()) 
             cPosition = addBiagramToMap(cEntry.getWord(), cStartoffset, map, cPosition);
+          
+          // extract  the words derived from the first stem as the keyword for the query processing
+          if(queryMode) break;
         }                
       }      
     } 
