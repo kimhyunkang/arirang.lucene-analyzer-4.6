@@ -170,24 +170,26 @@ public final class KoreanFilter extends TokenFilter {
     Map<String,Token> map = new LinkedHashMap<String,Token>();
     if(hasOrigin) map.put("0:"+input, new Token(input,offsetAtt.startOffset()));
 
-    if(outputs.get(0).getScore()>=AnalysisOutput.SCORE_COMPOUNDS) {
-      extractKeyword(outputs,offsetAtt.startOffset(), map, 0);      
-    } else {
-      // check whether the input text has some insert spacing errors.
-      List<AnalysisOutput> list = wsAnal.analyze(input);      
-      List<AnalysisOutput> results = new ArrayList<AnalysisOutput>();    
-      if(list.size()>1 && wsAnal.getOutputScore(list)>AnalysisOutput.SCORE_ANALYSIS) {
-        int offset = 0;
-        for(AnalysisOutput o : list) {
-          if(hasOrigin) map.put(o.getSource(), new Token(o.getSource(),offsetAtt.startOffset()+offset,1));        
-          results.addAll(morph.analyze(o.getSource()));
-          offset += o.getSource().length();
-        }       
-      } else {
-        results.addAll(outputs);
-      }
-      extractKeyword(results, offsetAtt.startOffset(), map, 0);
-    }
+    extractKeyword(outputs,offsetAtt.startOffset(), map, 0); 
+    
+//    if(outputs.get(0).getScore()>=AnalysisOutput.SCORE_COMPOUNDS) {
+//      extractKeyword(outputs,offsetAtt.startOffset(), map, 0);      
+////    } else {
+////      // check whether the input text has some insert spacing errors.
+////      List<AnalysisOutput> list = wsAnal.analyze(input);      
+////      List<AnalysisOutput> results = new ArrayList<AnalysisOutput>();    
+////      if(list.size()>1 && wsAnal.getOutputScore(list)>AnalysisOutput.SCORE_ANALYSIS) {
+////        int offset = 0;
+////        for(AnalysisOutput o : list) {
+////          if(hasOrigin) map.put(o.getSource(), new Token(o.getSource(),offsetAtt.startOffset()+offset,1));        
+////          results.addAll(morph.analyze(o.getSource()));
+////          offset += o.getSource().length();
+////        }       
+////      } else {
+////        results.addAll(outputs);
+////      }
+////      extractKeyword(results, offsetAtt.startOffset(), map, 0);
+//    }
         
     morphQueue.addAll(map.values());
   }
