@@ -78,6 +78,6 @@ public class KoreanFilterFactory extends TokenFilterFactory {
   }
 
   public TokenStream create(TokenStream tokenstream) {
-    return new KoreanFilter(tokenstream, bigrammable, hasOrigin, exactMatch, hasCNoun);
+    return new KoreanFilter(tokenstream, bigrammable, hasOrigin, exactMatch, hasCNoun, queryMode);
   }
 }
