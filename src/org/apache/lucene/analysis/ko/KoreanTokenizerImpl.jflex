@@ -135,7 +135,7 @@ CHINESELETTER = [\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]
 // Chinese, Japanese
 CJ            = ([\u3040-\u318f\u3100-\u312f\u3040-\u309F\u30A0-\u30FF\u31F0-\u31FF\u3300-\u337f\uff65-\uff9f])+
 
-WHITESPACE    = \r\n | [ \r\n\t\f]
+WHITESPACE    = \r\n | [ \r\n\t\f\u000a-\u0010]
 
 %%
 

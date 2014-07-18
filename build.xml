@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="kr.anlayzer.2x" basedir=".">
+
+	<!-- local settings - will override those in build.properties -->
+	<property file="build.properties" />
+	
+	<!-- build a list all jar files needed for compiling -->
+	<path id="morph.classpath">
+		<fileset dir="${dir.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>	
+
+	  <target name="morph-jflex">
+	    <taskdef classname="jflex.anttask.JFlexTask" name="jflex">
+	      <classpath location="/Users/isumyeong/.m2/repository/de/jflex/jflex/1.5.1/jflex-1.5.1.jar" />
+	    </taskdef>
+
+	    <jflex file="src/org/apache/lucene/analysis/ko/KoreanTokenizerImpl.jflex"
+	           outdir="src/org/apache/lucene/analysis/ko"
+	           nobak="on" />
+	  </target>	
+			
+</project>
