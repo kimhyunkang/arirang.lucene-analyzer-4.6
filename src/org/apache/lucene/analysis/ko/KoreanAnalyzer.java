@@ -97,15 +97,17 @@ public class KoreanAnalyzer extends StopwordAnalyzerBase {
   @Override
   protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
     final KoreanTokenizer src = new KoreanTokenizer(reader);
-    src.setMaxTokenLength(maxTokenLength);
+//    src.setMaxTokenLength(maxTokenLength);
     TokenStream tok = new LowerCaseFilter(matchVersion, src);
     tok = new ClassicFilter(tok);
     tok = new KoreanFilter(tok, bigrammable, hasOrigin, exactMatch, originCNoun, queryMode);
+    tok = new HanjaMappingFilter(tok);
+    tok = new PunctuationDelimitFilter(tok);
     tok = new StopFilter(matchVersion, tok, stopwords);
     return new TokenStreamComponents(src, tok) {
       @Override
       protected void setReader(final Reader reader) throws IOException {
-        src.setMaxTokenLength(KoreanAnalyzer.this.maxTokenLength);
+//        src.setMaxTokenLength(KoreanAnalyzer.this.maxTokenLength);
         super.setReader(reader);
       }
     };
