@@ -1,27 +1,18 @@
 package org.apache.lucene.ko;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.StringReader;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.core.KeywordAnalyzer;
-import org.apache.lucene.analysis.core.KeywordTokenizer;
-import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 import org.apache.lucene.analysis.ko.KoreanTokenizer;
-import org.apache.lucene.analysis.synonym.SynonymFilter;
-import org.apache.lucene.analysis.tokenattributes.*;
-import org.apache.lucene.util.UnicodeUtil;
-import org.apache.lucene.util.Version;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 public class KoreanNTokenizerTest extends TestCase {
 
